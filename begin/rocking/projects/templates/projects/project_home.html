@@ -1,0 +1,23 @@
+{% extends "accounts_base.html" %}
+
+{% block content %}
+<h2>Assignments</h2>
+{% if assignments|length == 0 %}
+    <p>No assignments available at the moment.</p>
+{% endif %}
+
+{% if request.user.is_teacher %}
+    <a href="{% url 'create_assignment' %}" class="btn btn-primary mb-3">Create New Assignment</a>
+{% endif %}
+
+
+
+<ul>
+{% for assignment in assignments %}
+    <li>
+        <strong><a href="{% url 'assignment_detail' assignment.id %}">{{ assignment.title }}</a> </strong><br>
+        Deadline: {{ assignment.deadline }}
+    </li>
+{% endfor %}
+</ul>
+{% endblock %}

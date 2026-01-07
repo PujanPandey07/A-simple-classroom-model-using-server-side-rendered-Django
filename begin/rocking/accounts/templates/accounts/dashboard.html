@@ -1,0 +1,37 @@
+{% extends "accounts_base.html" %}
+
+{% block title %}Student Dashboard{% endblock %}
+
+{% block content %}
+{% if request.user.is_student %}
+
+<h2>Welcome, {{ request.user.username }} 👋</h2>
+<p>You are logged in as a <strong>Student</strong></p>
+
+<ul>
+    <li class="nav-item">
+          <button class="nav-link" href="{% url 'project_list' %}">View Assignments</button>
+        </li>
+
+    <li>Check Feedback</li>
+</ul>
+{% endif %}
+{% if request.user.is_teacher %}
+<h2>Welcome, {{ request.user.username }} 👋</h2>
+    ul>
+    <li class="nav-item">
+          <button class="nav-link" href="{% url 'project_list' %}">View Assignments</button>
+        </li>
+    <li class="nav-item">
+          <button class="nav-link" href="{% url 'create_assignment' %}">Create Assignment</button>
+        </li>
+    
+
+
+    <li>Check Feedback</li>
+</ul>
+
+    <li>Check Feedback</li>
+</ul>
+{% endif %}
+{% endblock %}

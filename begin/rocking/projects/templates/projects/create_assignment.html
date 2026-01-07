@@ -1,0 +1,27 @@
+{% extends "projects_base.html" %}
+{% block title %}Assignment{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm">
+    <div class="card-body">
+        <h3>{{ assignment.title }}</h3>
+        <p class="text-muted">Deadline: {{ assignment.deadline }}</p>
+
+        <hr>
+
+        <p>{{ assignment.description }}</p>
+
+        {% if assignment.material %}
+            <a href="{{ assignment.material.url }}" class="btn btn-outline-secondary">
+                Download Material
+            </a>
+        {% endif %}
+
+        {% if user.is_student %}
+            <a href="{% url 'submit_assignment' assignment.id %}" class="btn btn-success ms-2">
+                Submit Assignment
+            </a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

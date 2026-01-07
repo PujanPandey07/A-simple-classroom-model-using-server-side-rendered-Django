@@ -1,0 +1,68 @@
+{% extends "projects_base.html" %}
+{% block title %}Assignment Detail{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+
+                <!-- Assignment Title -->
+                <h3 class="fw-bold mb-1">{{ assignment.title }}</h3>
+
+                <!-- Teacher Info -->
+                <p class="text-muted mb-2">
+                    Assigned by:
+                    <strong>
+                        {{ assignment.teacher.get_full_name|default:assignment.teacher.username }}
+                    </strong>
+                </p>
+
+                <!-- Deadline -->
+                <p class="text-muted">
+                    ⏰ Deadline:
+                    <span class="fw-semibold">{{ assignment.deadline }}</span>
+                </p>
+
+                <hr>
+
+                <!-- Description -->
+                <p class="mb-4">
+                    {{ assignment.description|linebreaks }}
+                </p>
+
+                <!-- Reference Materials -->
+                {% if assignment.ref_files %}
+                    <div class="mb-4">
+                        <h5 class="fw-semibold">📎 Reference Material</h5>
+                        <a href="{{ assignment.ref_files.url }}"
+                           class="btn btn-outline-secondary"
+                           target="_blank">
+                            Download File
+                        </a>
+                    </div>
+                {% endif %}
+
+                <!-- Student Actions -->
+                {% if user.is_authenticated and user.is_student %}
+                    <hr>
+
+                    {% if not assignment.is_expired %}
+                        <a href="{% url 'submit_assignment' assignment.id %}"
+                           class="btn btn-success">
+                            📤 Submit Assignment
+                        </a>
+                    {% else %}
+                        <div class="alert alert-warning mt-3">
+                            ❌ Submission deadline has passed.
+                        </div>
+                    {% endif %}
+                {% endif %}
+
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
