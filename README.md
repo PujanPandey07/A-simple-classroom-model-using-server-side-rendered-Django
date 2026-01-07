@@ -1,4 +1,5 @@
-# 🎓 Student Assignment Portal (Django)
+
+###A-simple-classroom-model-using-server-side-rendered-Django
 
 A role-based web application built using **Django** where:
 - **Teachers** can create assignments and upload reference materials
