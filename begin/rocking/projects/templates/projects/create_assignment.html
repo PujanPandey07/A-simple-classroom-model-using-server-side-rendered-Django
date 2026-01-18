@@ -1,27 +1,73 @@
 {% extends "projects_base.html" %}
-{% block title %}Assignment{% endblock %}
+{% block title %}Create Assignment{% endblock %}
 
 {% block content %}
-<div class="card shadow-sm">
-    <div class="card-body">
-        <h3>{{ assignment.title }}</h3>
-        <p class="text-muted">Deadline: {{ assignment.deadline }}</p>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
 
-        <hr>
+            <div class="card shadow border-0">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">📘 Create Assignment</h4>
+                    <small>Fill in the details below to create a new assignment</small>
+                </div>
 
-        <p>{{ assignment.description }}</p>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
 
-        {% if assignment.material %}
-            <a href="{{ assignment.material.url }}" class="btn btn-outline-secondary">
-                Download Material
-            </a>
-        {% endif %}
+                        <!-- Title -->
+                        <div class="mb-3">
+                            <label for="title" class="form-label fw-semibold">Assignment Title</label>
+                            <input type="text" class="form-control" id="title" name="title"
+                                   value="{{ assignment.title }}" placeholder="Enter assignment title" required>
+                        </div>
 
-        {% if user.is_student %}
-            <a href="{% url 'submit_assignment' assignment.id %}" class="btn btn-success ms-2">
-                Submit Assignment
-            </a>
-        {% endif %}
+                        <!-- Description -->
+                        <div class="mb-3">
+                            <label for="description" class="form-label fw-semibold">Description</label>
+                            <textarea class="form-control" id="description" name="description" rows="4"
+                                      placeholder="Describe the assignment briefly" required>{{ assignment.description }}</textarea>
+                        </div>
+
+                        <!-- Deadline -->
+                        <div class="mb-3">
+                            <label for="deadline" class="form-label fw-semibold">Deadline</label>
+                            <input type="datetime-local" class="form-control" id="deadline" name="deadline"
+                                   value="{{ assignment.deadline|date:'Y-m-d\\TH:i' }}" required>
+                            <small class="text-muted">Students won’t be able to submit after this time</small>
+                        </div>
+
+                        <!-- Reference File -->
+                        <div class="mb-3">
+                            <label for="ref_files" class="form-label fw-semibold">Reference File (Optional)</label>
+                            <input type="file" class="form-control" id="ref_files" name="ref_files">
+                            <small class="text-muted">PDF, DOCX, PPT, ZIP supported</small>
+                        </div>
+
+                        <!-- Reference URL -->
+                        <div class="mb-4">
+                            <label for="reference_url" class="form-label fw-semibold">Reference URL (Optional)</label>
+                            <input type="url" class="form-control" id="reference_url" name="reference_url"
+                                   value="{{ assignment.reference_url }}"
+                                   placeholder="https://example.com">
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'project_list' %}" class="btn btn-outline-secondary">
+                                Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary px-4">
+                                Create Assignment
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
     </div>
 </div>
 {% endblock %}

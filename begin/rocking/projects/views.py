@@ -6,6 +6,8 @@ from .forms import AssignmentForm, SubmissionForm
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
 from django.contrib import messages
+from accounts.models import profile
+from django.contrib.auth.models import User
 
 
 # Create your views here.
@@ -15,8 +17,18 @@ from django.contrib import messages
 def project_list(request):
     assignments = assignment.objects.all().filter(
         deadline__gte=timezone.now()).order_by('deadline')
+    is_student = (
+        request.user.is_authenticated and
+        request.user.profile.role == "student"
+    )
+    is_teacher = (
+        request.user.is_authenticated and
+        request.user.profile.role == "teacher"
+    )
     return render(request, "projects/project_home.html", {
-        "assignments": assignments
+        "assignments": assignments,
+        "is_student": is_student,
+        "is_teacher": is_teacher
     })
 
 
@@ -68,8 +80,25 @@ def assignment_detail(request, pk):
         assignment=Assignment,
         student=request.user
     ).first()
+    is_student = (
+        request.user.is_authenticated and
+        request.user.profile.role == "student"
+    )
 
     return render(request, 'projects/assignment_detail.html', {
         'assignment': Assignment,
-        'submission': Submission
+        'submission': Submission,
+        'is_student': is_student
+    })
+
+
+@login_required
+@teacher_required
+def view_submissions(request, assignment_id):
+    assignment_instance = get_object_or_404(assignment, id=assignment_id)
+    submissions = submission.objects.filter(assignment=assignment_instance)
+
+    return render(request, 'projects/view_submissions.html', {
+        'assignment': assignment_instance,
+        'submissions': submissions
     })

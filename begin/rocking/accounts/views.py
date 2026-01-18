@@ -8,6 +8,8 @@ from django.http import HttpResponseRedirect
 from .forms import LoginForm, RegisterForm
 from django.contrib.auth.decorators import login_required
 from .decorators import student_required, teacher_required
+from .models import profile
+
 
 # Create your views here.
 
@@ -66,4 +68,6 @@ def logout_view(request):
 
 @login_required
 def dashboard(request):
-    return render(request, "accounts/dashboard.html")
+    val = request.user.profile.role == "Student"
+
+    return render(request, "accounts/dashboard.html", {"val": val})

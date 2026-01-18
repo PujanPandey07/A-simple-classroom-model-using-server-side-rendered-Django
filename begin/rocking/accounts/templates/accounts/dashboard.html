@@ -1,9 +1,9 @@
-{% extends "accounts_base.html" %}
+{% extends "projects_base.html" %}
 
-{% block title %}Student Dashboard{% endblock %}
+{% block title %} Dashboard{% endblock %}
 
 {% block content %}
-{% if request.user.is_student %}
+{% if val %}
 
 <h2>Welcome, {{ request.user.username }} 👋</h2>
 <p>You are logged in as a <strong>Student</strong></p>
@@ -16,9 +16,9 @@
     <li>Check Feedback</li>
 </ul>
 {% endif %}
-{% if request.user.is_teacher %}
+{% if not val %}
 <h2>Welcome, {{ request.user.username }} 👋</h2>
-    ul>
+    <ul>
     <li class="nav-item">
           <button class="nav-link" href="{% url 'project_list' %}">View Assignments</button>
         </li>

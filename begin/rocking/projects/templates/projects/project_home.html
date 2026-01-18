@@ -1,4 +1,4 @@
-{% extends "accounts_base.html" %}
+{% extends "projects_base.html" %}
 
 {% block content %}
 <h2>Assignments</h2>
@@ -14,10 +14,18 @@
 
 <ul>
 {% for assignment in assignments %}
+{% if is_teacher %}
+    <li>
+        <strong><a href="{% url 'view_submissions' assignment.id %}">{{ assignment.title }}</a> </strong><br>
+        Deadline: {{ assignment.deadline }}
+    </li>
+{% endif %}
+{% if is_student %}
     <li>
         <strong><a href="{% url 'assignment_detail' assignment.id %}">{{ assignment.title }}</a> </strong><br>
         Deadline: {{ assignment.deadline }}
     </li>
+{% endif %}
 {% endfor %}
 </ul>
 {% endblock %}
