@@ -15,20 +15,16 @@ from django.contrib.auth.models import User
 
 @login_required
 def project_list(request):
-    assignments = assignment.objects.all().filter(
-        deadline__gte=timezone.now()).order_by('deadline')
-    is_student = (
-        request.user.is_authenticated and
-        request.user.profile.role == "student"
-    )
-    is_teacher = (
-        request.user.is_authenticated and
-        request.user.profile.role == "teacher"
-    )
+    if request.user.profile.role == "student":
+        assignments = assignment.objects.all().order_by('deadline')
+    else:
+        assignments = assignment.objects.filter(
+            teacher=request.user
+        ).order_by('deadline')
+
     return render(request, "projects/project_home.html", {
         "assignments": assignments,
-        "is_student": is_student,
-        "is_teacher": is_teacher
+        "now": timezone.now(),   # useful for template deadline checks
     })
 
 
@@ -95,10 +91,11 @@ def assignment_detail(request, pk):
 @login_required
 @teacher_required
 def view_submissions(request, assignment_id):
-    assignment_instance = get_object_or_404(assignment, id=assignment_id)
-    submissions = submission.objects.filter(assignment=assignment_instance)
+    submissions = submission.objects.filter(
+        assignment_id=assignment_id,
+        assignment__teacher=request.user
+    )
 
     return render(request, 'projects/view_submissions.html', {
-        'assignment': assignment_instance,
         'submissions': submissions
     })

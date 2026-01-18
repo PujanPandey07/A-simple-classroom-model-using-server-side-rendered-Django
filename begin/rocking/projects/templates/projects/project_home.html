@@ -2,30 +2,42 @@
 
 {% block content %}
 <h2>Assignments</h2>
+
 {% if assignments|length == 0 %}
     <p>No assignments available at the moment.</p>
 {% endif %}
 
-{% if request.user.is_teacher %}
-    <a href="{% url 'create_assignment' %}" class="btn btn-primary mb-3">Create New Assignment</a>
+{% if request.user.profile.role == "teacher" %}
+    <a href="{% url 'create_assignment' %}" class="btn btn-primary mb-3">
+        Create New Assignment
+    </a>
 {% endif %}
 
-
-
-<ul>
+<ul class="list-group">
 {% for assignment in assignments %}
-{% if is_teacher %}
-    <li>
-        <strong><a href="{% url 'view_submissions' assignment.id %}">{{ assignment.title }}</a> </strong><br>
-        Deadline: {{ assignment.deadline }}
+    <li class="list-group-item">
+
+        {% if request.user.profile.role == "teacher" %}
+            <strong>
+                <a href="{% url 'view_submissions' assignment.id %}">
+                    {{ assignment.title }}
+                </a>
+            </strong>
+
+        {% elif request.user.profile.role == "student" %}
+            <strong>
+                <a href="{% url 'assignment_detail' assignment.id %}">
+                    {{ assignment.title }}
+                </a>
+            </strong>
+        {% endif %}
+
+        <br>
+        <small class="text-muted">
+            Deadline: {{ assignment.deadline }}
+        </small>
+
     </li>
-{% endif %}
-{% if is_student %}
-    <li>
-        <strong><a href="{% url 'assignment_detail' assignment.id %}">{{ assignment.title }}</a> </strong><br>
-        Deadline: {{ assignment.deadline }}
-    </li>
-{% endif %}
 {% endfor %}
 </ul>
 {% endblock %}
