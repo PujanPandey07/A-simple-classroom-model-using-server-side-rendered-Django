@@ -51,6 +51,8 @@ def create_assignment(request):
 @student_required
 def submit_assignment(request, assignment_id):
     assignment_instance = assignment.objects.get(id=assignment_id)
+    print("Submitting for assignment ID:", assignment_instance.id)
+
     if request.method == 'POST':
         form = SubmissionForm(request.POST, request.FILES)
         if form.is_valid():
@@ -91,11 +93,21 @@ def assignment_detail(request, pk):
 @login_required
 @teacher_required
 def view_submissions(request, assignment_id):
-    submissions = submission.objects.filter(
-        assignment_id=assignment_id,
-        assignment__teacher=request.user
+    assignment_obj = get_object_or_404(
+        assignment,
+        id=assignment_id,
+        teacher=request.user
     )
 
+    submissions = submission.objects.filter(
+        assignment=assignment_obj
+    )
+
+    print("Assignment ID:", assignment_obj.id)
+    print("Teacher:", assignment_obj.teacher)
+    print("Submissions count:", submissions.count())
+
     return render(request, 'projects/view_submissions.html', {
+        'assignment': assignment_obj,
         'submissions': submissions
     })

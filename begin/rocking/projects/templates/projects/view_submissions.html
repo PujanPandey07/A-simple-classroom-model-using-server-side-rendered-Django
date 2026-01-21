@@ -14,6 +14,10 @@
             <strong>Submitted on:</strong> {{ submission.submitted_at }}<br>
             <strong>Comment:</strong> {{ submission.comment|default:"No comment provided." }}<br>
             <a href="{{ submission.file.url }}" class="btn btn-outline-primary btn-sm mt-2" target="_blank">Download Submission</a>
+            <a href="{% url 'submission_reviews' submission.id %}"
+   class="btn btn-sm btn-primary">
+   Review
+</a>
         </li>
     {% endfor %}
     </ul>

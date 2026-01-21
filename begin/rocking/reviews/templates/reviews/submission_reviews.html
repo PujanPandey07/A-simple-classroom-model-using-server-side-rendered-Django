@@ -1,0 +1,48 @@
+{% extends "projects_base.html" %}
+{% block title %}Submission Review{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+    <h3>{{ submission.assignment.title }}</h3>
+
+    <p><strong>Student:</strong> {{ submission.student.username }}</p>
+    <p><strong>Submitted at:</strong> {{ submission.submitted_at }}</p>
+
+    {% if submission.file %}
+        <a href="{{ submission.file.url }}"
+           class="btn btn-success btn-sm mb-3">
+            Download Submission
+        </a>
+    {% endif %}
+
+    <hr>
+
+    <h4>Reviews</h4>
+
+    {% if reviews %}
+        {% for review in reviews %}
+            <div class="border p-3 rounded mb-2">
+                <strong>{{ review.teacher.username }}</strong>
+                <small class="text-muted">({{ review.created_at }})</small>
+                <p class="mt-2">{{ review.review }}</p>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="text-muted">No reviews yet.</p>
+    {% endif %}
+
+    {% if is_teacher %}
+        <hr>
+        <h4>Add Review</h4>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.review }}
+            <button class="btn btn-primary mt-2">
+                Submit Review
+            </button>
+        </form>
+    {% endif %}
+
+</div>
+{% endblock %}

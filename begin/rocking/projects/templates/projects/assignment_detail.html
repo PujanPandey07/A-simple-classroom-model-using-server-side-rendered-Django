@@ -54,6 +54,13 @@
                             📤 Submit Assignment
                         </a>
                 {% endif %}
+{% if submission %}
+<a href="{% url 'submission_reviews' submission.id %}"
+   class="btn btn-outline-primary">
+   View Teacher Review
+</a>
+{% endif %}
+
 
             </div>
         </div>

@@ -30,12 +30,14 @@ class submission(models.Model):
         on_delete=models.CASCADE,
         related_name="submissions"
     )
+
     student = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name="submissions"
     )
-    content = models.TextField()
+
+    content = models.TextField(blank=True)
     file = models.FileField(
         upload_to='submission_files/', blank=True, null=True)
     drive_link = models.URLField(blank=True, null=True)

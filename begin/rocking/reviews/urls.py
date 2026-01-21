@@ -1,4 +1,8 @@
 from django.urls import path
-from . import views
+from .views import submission_reviews
+
 urlpatterns = [
-    path('', views.review_list, name='review_list'),]
+    path('submission/<int:submission_id>/',
+         submission_reviews,
+         name='submission_reviews'),
+]
